@@ -1,6 +1,7 @@
 help.py
 .venv
 venvl
-sweater.webp
-human.png
+images_example/sweater.webp
+images_example/human.png
 .env
+images_example
