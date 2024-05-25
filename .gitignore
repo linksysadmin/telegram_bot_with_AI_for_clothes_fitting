@@ -1,5 +1,7 @@
 help.py
 .venv
 venvl
-
+log
 .env
+del.py
+help.md

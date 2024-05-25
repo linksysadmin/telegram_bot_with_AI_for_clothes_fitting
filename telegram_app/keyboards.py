@@ -1,35 +1,46 @@
+from typing import Iterator
+
 from aiogram.filters.callback_data import CallbackData
 from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 
-class TypeClothCbData(CallbackData, prefix="photo"):
+class ClothType:
+    def __init__(self, api_string: str, description: str):
+        self.api_string = api_string
+        self.description = description
+
+
+class ClothTypesList:
+    def __init__(self):
+        self._cloth_types = []
+
+    def add_type(self, cloth_type: ClothType):
+        self._cloth_types.append(cloth_type)
+
+    def __iter__(self) -> Iterator[ClothType]:
+        return iter(self._cloth_types)
+
+
+class ClothTypeCallbackData(CallbackData, prefix="cloth"):
     cloth: str
 
 
-CATEGORIES = {
-    "upper_body": "Примерка топа",
-    "lower_body": "Примерка низа",
-    "dresses": "Примерка платья",
-}
-
-
-async def start():
+async def clothing_types():
     keyboard = InlineKeyboardBuilder()
-    keyboard.button(text=CATEGORIES["upper_body"], callback_data=TypeClothCbData(cloth="upper_body").pack())
-    keyboard.button(text=CATEGORIES["lower_body"], callback_data=TypeClothCbData(cloth="lower_body").pack())
-    keyboard.button(text=CATEGORIES["dresses"], callback_data=TypeClothCbData(cloth="dresses").pack())
+    for c_type in cloth_types:
+        keyboard.button(text=c_type.description, callback_data=ClothTypeCallbackData(cloth=c_type.api_string).pack())
     keyboard.adjust(1)
     return keyboard.as_markup()
 
 
-async def exit():
+async def cancel():
     keyboard = InlineKeyboardBuilder()
-    keyboard.add(InlineKeyboardButton(text='Отменить', callback_data='exit'))
+    keyboard.add(InlineKeyboardButton(text='Отменить', callback_data='cancel'))
     return keyboard.as_markup()
 
 
-
-
-
-
+cloth_types = ClothTypesList()
+cloth_types.add_type(ClothType("upper_body", "Примерка топа"))
+cloth_types.add_type(ClothType("lower_body", "Примерка низа"))
+cloth_types.add_type(ClothType("dresses", "Примерка платья"))
