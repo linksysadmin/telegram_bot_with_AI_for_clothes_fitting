@@ -5,7 +5,7 @@ After=network.target
 
 [Service]
 WorkingDirectory=/var/www/client_telegram_bot_generation_photo
-ExecStart=/var/www/client_telegram_bot_generation_photo/.venv/bin/python3 /var/www/client_telegram_bot_generation_photo/main.py
+ExecStart=/var/www/client_telegram_bot_generation_photo/.venv/bin/python3 /var/www/client_telegram_bot_generation_photo/telegram_app/main.py
 Type=simple
 User=inside
 RestartSec=10

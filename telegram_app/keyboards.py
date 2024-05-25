@@ -4,6 +4,8 @@ from aiogram.filters.callback_data import CallbackData
 from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
+from config import TELEGRAM_CHANEL_URL
+
 
 class ClothType:
     def __init__(self, api_string: str, description: str):
@@ -26,6 +28,12 @@ class ClothTypeCallbackData(CallbackData, prefix="cloth"):
     cloth: str
 
 
+cloth_types = ClothTypesList()
+cloth_types.add_type(ClothType("upper_body", "Примерка топа"))
+cloth_types.add_type(ClothType("lower_body", "Примерка низа"))
+cloth_types.add_type(ClothType("dresses", "Примерка платья"))
+
+
 async def clothing_types():
     keyboard = InlineKeyboardBuilder()
     for c_type in cloth_types:
@@ -40,7 +48,9 @@ async def cancel():
     return keyboard.as_markup()
 
 
-cloth_types = ClothTypesList()
-cloth_types.add_type(ClothType("upper_body", "Примерка топа"))
-cloth_types.add_type(ClothType("lower_body", "Примерка низа"))
-cloth_types.add_type(ClothType("dresses", "Примерка платья"))
+async def subscribe():
+    keyboard = InlineKeyboardBuilder()
+    keyboard.add(InlineKeyboardButton(text='✅Подписаться', url=TELEGRAM_CHANEL_URL))
+    return keyboard.as_markup()
+
+

@@ -11,8 +11,16 @@ from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 from config import TELEGRAM_TOKEN, BASE_WEBHOOK_URL, WEBHOOK_PATH, WEB_SERVER_HOST, WEB_SERVER_PORT
-from telegram_app.handlers import router
+from routers import router as main_router
 
+logging.basicConfig(
+    # stream=sys.stdout,
+    filename='log.log',
+    level=logging.INFO,
+    encoding='utf-8',
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%m.%d.%Y',
+)
 
 logger = logging.getLogger(__name__)
 
@@ -22,20 +30,26 @@ COMMANDS = [
 ]
 
 
-# bot = Bot(token=TELEGRAM_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
-# dp = Dispatcher()
+
+dp = Dispatcher()
+bot = Bot(token=TELEGRAM_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+
 
 # async def main() -> None:
-#     dp.include_router(router)
+#     logging.basicConfig(level=logging.INFO)
 #     await bot.set_my_commands(COMMANDS)
 #     await dp.start_polling(bot)
 #
 # if __name__ == "__main__":
-#     asyncio.run(main())
+#     try:
+#         asyncio.run(main())
+#     except KeyboardInterrupt:
+#         logger.warning('Завершение...')
 
 
 
 async def on_startup(bot: Bot) -> None:
+    await bot.set_my_commands(COMMANDS)
     await bot.set_webhook(
         f"{BASE_WEBHOOK_URL}{WEBHOOK_PATH}",
         # secret_token=WEBHOOK_SECRET,
@@ -50,16 +64,12 @@ async def on_shutdown(bot):
 
 
 def main() -> None:
-    dp = Dispatcher()
-    dp.include_router(router)
-
     # При запуске приложения
+    dp.include_router(main_router)
     dp.startup.register(on_startup)
 
     # При закрытии приложения
     dp.shutdown.register(on_shutdown)
-
-    bot = Bot(TELEGRAM_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     app = web.Application()
 
     webhook_requests_handler = SimpleRequestHandler(  # TokenBasedRequestHandler
@@ -76,15 +86,5 @@ def main() -> None:
         logger.error(e)
 
 
-
-
-
 if __name__ == "__main__":
-    logging.basicConfig(
-        filename='log/log.log',
-        level=logging.INFO,
-        encoding='utf-8',
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        datefmt='%m.%d.%Y',
-    )
     main()

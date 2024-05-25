@@ -5,6 +5,7 @@ from typing import Dict
 
 import replicate
 
+from config import REPLICATE_MODEL
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +13,7 @@ logger = logging.getLogger(__name__)
 async def get_url_converted_image(data_images: Dict) -> str:
     try:
         image_url = await replicate.async_run(
-            "cuuupid/idm-vton:906425dbca90663ff5427624839572cc56ea7d380343d13e2a4c4b09d3f0c30f",
+            REPLICATE_MODEL,
             input=data_images,
         )
         return image_url
