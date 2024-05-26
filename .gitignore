@@ -5,3 +5,4 @@ log
 .env
 del.py
 help.md
+log.log
