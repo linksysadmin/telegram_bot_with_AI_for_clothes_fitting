@@ -8,3 +8,6 @@ help.md
 log.log
 app/database/database.db
 client_telegram_bot_generation_photo.service
+.idea
+__pycache__
+
