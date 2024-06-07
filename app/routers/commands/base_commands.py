@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
 from app import keyboards as kb
-from app.messages_templates import MESSAGE_HELP
+from app.templates.messages_templates import MESSAGE_HELP
 
 router = Router(name=__name__)
 
